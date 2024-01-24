@@ -6,12 +6,12 @@ def main():
     # On this line, we'll add the end parameter
     # so that the cursor doesn't go to the next line
     # and puts the prompt on the same line as "Name:"
-    print("Name: ", end=" ")
+    # print("Name: ", end=" ")
 
     # "input" is what's called a blocking function,
     # and it waits on the user to hit Enter before
     # allowing the program to continue executing
-    name = input()
+    name = input("Name: ")
 
     # Here we get the result from the input function
     # which is returned as a string, and combine a
@@ -31,11 +31,11 @@ def main():
         print("I'm glad to see you!")
 
     print("How old are you?")
-    print("Age: ", end="")
+    # print("Age: ", end="")
 
     # Because input returns a string, we'll use the
     # int() function to *cast* a string into an integer.
-    age = int(input())
+    age = int(input("Age: "))
 
     print("For each year you've been alive I'll give you a star!")
 
@@ -48,11 +48,9 @@ def main():
     print("Bye!")
 
 
-
-
-
-
-
 # While the main function is defined above, we must invoke
 # the function here to actually execute it
 main()
+
+
+test commit
