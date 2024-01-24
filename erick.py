@@ -19,7 +19,39 @@ def main():
     # Plus symbols are used to combine multiple strings
     # together. The print function only accepts a single
     # string, so we must combine them.
-    print("Hello " + name + "! Nice to meet you.")
+    print("Hello " + name + "!")
+
+    # This is a super basic if/else block
+    # "==" is used to test equality between two things
+    if name == "Tim":
+        print("I'm getting kind of bored of you. >:(")
+    else:
+        # If the initial statement isn't met, you can call
+        # alternative code in the else block
+        print("I'm glad to see you!")
+
+    print("How old are you?")
+    print("Age: ", end="")
+
+    # Because input returns a string, we'll use the
+    # int() function to *cast* a string into an integer.
+    age = int(input())
+
+    print("For each year you've been alive I'll give you a star!")
+
+    # This is a basic "for" loop. range() is used in Python to
+    # iterate over a range of numbers. In this loop, the indented
+    # code will be called the number of times in the range() function
+    for x in range(age):
+        print("⭐", end="")
+
+    print("Bye!")
+
+
+
+
+
+
 
 # While the main function is defined above, we must invoke
 # the function here to actually execute it
