@@ -1,58 +1,53 @@
+import urllib.request
+import json
+
+
+def get_lat_long_from_location(location):
+    suggest_uri = ("https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest"
+                   "?f=json&countryCode=USA%2CPRI%2CVIR%2CGUM%2CASM"
+                   "&category=Land+Features%2CBay%2CChannel%2CCove%2CDam%2CDelta%2CGulf%2CLagoon%2CLake%2COcean%2CReef"
+                   "%2CReservoir%2CSea%2CSound%2CStrait%2CWaterfall%2CWharf%2CAmusement+Park%2CHistorical+Monument"
+                   "%2CLandmark%2CTourist+Attraction%2CZoo%2CCollege%2CBeach%2CCampground%2CGolf+Course%2CHarbor%2CNature"
+                   "+Reserve%2COther+Parks+and+Outdoors%2CPark%2CRacetrack%2CScenic+Overlook%2CSki+Resort%2CSports+Center"
+                   "%2CSports+Field%2CWildlife+Reserve%2CAirport%2CFerry%2CMarina%2CPier%2CPort%2CResort%2CPostal"
+                   "%2CPopulated+Place"
+                   "&maxSuggestions=5"
+                   "&text={}".format(location.replace(" ", "%20")))
+    suggest_results = json.loads(urllib.request.urlopen(suggest_uri).read())
+    first_suggestion = suggest_results['suggestions'][0]
+    magic_key = first_suggestion['magicKey']
+    location = first_suggestion['text']
+
+    print("Top Match: {}".format(location))
+    lat_long_req_uri = (
+        "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/find?text={}&magicKey={}&f=json".format(
+            location, magic_key)).replace(" ", "%20")
+    find_results = json.loads(urllib.request.urlopen(lat_long_req_uri).read())
+
+    return_results = dict()
+    return_results["lat"] = find_results['locations'][0]['feature']['geometry']['y']
+    return_results["long"] = find_results['locations'][0]['feature']['geometry']['x']
+    return return_results
+
+
+def get_forecast_for_lat_long(lat, long):
+    forecast_uri = ("https://forecast.weather.gov/MapClick.php?&lat={}&lon={}&FcstType=json".format(lat, long))
+    forecast_results = json.loads(urllib.request.urlopen(forecast_uri).read())
+    return forecast_results["data"]
+
+
+def get_forecast():
+    location = input("Location: ")
+    lat_long = get_lat_long_from_location(location)
+    forecast = get_forecast_for_lat_long(lat_long["lat"], lat_long["long"])
+    print("Current forecast: {}F, {}".format(forecast["temperature"][0], forecast["weather"][0]))
+    print("Any other locations you want to lookup?")
+    return get_forecast()
+
+
 def main():
-    # The print function writes text to stdout (which is
-    # typically text output to the terminal)
-    print("Hey! What's your name?")
-
-    # On this line, we'll add the end parameter
-    # so that the cursor doesn't go to the next line
-    # and puts the prompt on the same line as "Name:"
-    print("Name: ", end=" ")
-
-    # "input" is what's called a blocking function,
-    # and it waits on the user to hit Enter before
-    # allowing the program to continue executing
-    name = input()
-
-    # Here we get the result from the input function
-    # which is returned as a string, and combine a
-    # few strings together to form a single string.
-    # Plus symbols are used to combine multiple strings
-    # together. The print function only accepts a single
-    # string, so we must combine them.
-    print("Hello " + name + "!")
-
-    # This is a super basic if/else block
-    # "==" is used to test equality between two things
-    if name == "Tim":
-        print("I'm getting kind of bored of you. >:(")
-    else:
-        # If the initial statement isn't met, you can call
-        # alternative code in the else block
-        print("I'm glad to see you!")
-
-    print("How old are you?")
-    print("Age: ", end="")
-
-    # Because input returns a string, we'll use the
-    # int() function to *cast* a string into an integer.
-    age = int(input())
-
-    print("For each year you've been alive I'll give you a star!")
-
-    # This is a basic "for" loop. range() is used in Python to
-    # iterate over a range of numbers. In this loop, the indented
-    # code will be called the number of times in the range() function
-    for x in range(age):
-        print("⭐", end="")
-
-    print("Bye!")
+    print("Let's pull the current forecast!")
+    get_forecast()
 
 
-
-
-
-
-
-# While the main function is defined above, we must invoke
-# the function here to actually execute it
 main()
