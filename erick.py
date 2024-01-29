@@ -9,8 +9,12 @@ def get_all_player_tags_from_clan(clan_tag):
 
     headers = {"Authorization": f"Bearer {auth_token}"}
     request = urllib.request.Request(clan_uri, headers=headers)
-    response = json.loads(urllib.request.urlopen(request).read())
-    print(response)
+
+    with urllib.request.urlopen(request) as response:
+        json_data = json.loads(response.read().decode('utf-8'))
+
+        clan_name = json_data.get("name", "N/A")
+        print(f"Clan Name: {clan_name}")
 
 
 def get_clan_tag():
