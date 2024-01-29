@@ -5,7 +5,6 @@ from config import auth_token
 
 # Get the war preference for each member in the clan
 def get_war_preference(player_tag):
-    # player_uri = f"https://api.clashofclans.com/v1/players/%23{player_tag}"
     player_uri = "https://api.clashofclans.com/v1/players/{}".format(player_tag.replace("#", "%23"))
     headers = {"Authorization": f"Bearer {auth_token}"}
     player_request = urllib.request.Request(player_uri, headers=headers)
@@ -41,3 +40,9 @@ def get_clan_tag():
 
 
 get_clan_tag()
+
+
+# To Do:
+# 1. Add error handling
+# 2. Add more documentation
+# 3. Add progress bar for read back?
