@@ -13,8 +13,10 @@ def get_all_player_tags_from_clan(clan_tag):
     with urllib.request.urlopen(request) as response:
         json_data = json.loads(response.read().decode('utf-8'))
 
-        clan_name = json_data.get("name", "N/A")
-        print(f"Clan Name: {clan_name}")
+        member_list = json_data.get("memberList", [])
+        for member in member_list:
+            player_tag = member.get("tag", "N/A")
+            print(f"Player Tag: {player_tag}")
 
 
 def get_clan_tag():
