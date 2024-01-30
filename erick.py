@@ -8,7 +8,7 @@ from tqdm import tqdm
 # Set variables
 credentials_path = './clash-of-clans-408313-6f7d5bc0eab1.json'
 spreadsheet_key = '1BAo-heHsljwPdtlUs1PPSbYqXEpHUR4taDugDWtdC3k'
-sheet_title = 'War Preference'
+sheet_title = 'Clan Data'
 
 
 # Get the war preference for each member in the clan
