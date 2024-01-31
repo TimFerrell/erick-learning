@@ -41,30 +41,14 @@ def get_all_player_tags_from_clan(clan_tag):
 
         with tqdm(total=len(member_list), desc="Querying MemberList") as pbar:
             for member in member_list:
-                name = member.get("name", "N/A")
-                player_tag = member.get("tag", "N/A")
-                player_role = member.get("role", "N/A")
-                town_hall_level = member.get("townHallLevel", "N/A")
-                exp_level = member.get("expLevel", "N/A")
-                clan_rank = member.get("clanRank", "N/A")
-                previous_clan_rank = member.get("previousClanRank", "N/A")
-                trophies = member.get("trophies", "N/A")
-                league_name = member.get("league", {}).get("name", "N/A")
-                builder_base_trophies = member.get("builderBaseTrophies", "N/A")
-                builder_base_league = member.get("builderBaseLeague", {}).get("name", "N/A")
-                donations = member.get("donations", "N/A")
-                donations_received = member.get("donationsReceived", "N/A")
-                war_preference = get_war_preference(player_tag)
-                # print(f"Player Tag: {player_tag}", f"Name: {name}", f"War Preference: {war_preference}")
-                # print(f"{name}", f"{player_tag}", f"{player_role}", f"{town_hall_level}", f"{exp_level}",
-                #       f"{clan_rank}", f"{previous_clan_rank}", f"{trophies}", f"{league_name}",
-                #       f"{builder_base_trophies}", f"{builder_base_league}", f"{donations}", f"{donations_received}",
-                #       f"{war_preference}")
+                player_data_dict = {
+                    'Name': member["name"],
+                    'Player Tag': member["tag"],
+                    'Player Role': member["role"]
+                }
 
                 # Append the formatted data to the list
-                player_data_list.append([name, player_tag, player_role, town_hall_level, exp_level, clan_rank,
-                                         previous_clan_rank, trophies, league_name, builder_base_trophies,
-                                         builder_base_league, donations, donations_received, war_preference])
+                player_data_list.append(player_data_dict)
 
                 pbar.update(1)
 
@@ -84,9 +68,12 @@ def write_to_sheet(player_data_list):
     sheet.clear()
 
     # Set headers
-    headers = ["Name", "Player Tag", "Player Role", "Town Hall Level", "Exp Level", "Clan Rank",
-               "Previous Clan Rank", "Trophies", "League Name", "Builder Base Trophies", "Builder Base League",
-               "Donations", "Donations Received", "War Preference"]
+    headers = list(player_data_list[0].keys())
+    print("Headers:", headers)
+
+    values = list(player_data_list[0].values())
+    print("Values:", values)
+
     sheet.append_row(headers)
 
     # Use tqdm to create a progress bar for the loop
