@@ -4,11 +4,13 @@ from config import auth_token
 from google.oauth2.service_account import Credentials
 import gspread
 from tqdm import tqdm
+import datetime
 
 # Set variables
 credentials_path = './clash-of-clans-408313-6f7d5bc0eab1.json'
 spreadsheet_key = '1BAo-heHsljwPdtlUs1PPSbYqXEpHUR4taDugDWtdC3k'
 sheet_title = 'Clan Data'
+sheet_title_datetime = 'Date_Time'
 
 
 # Get the war preference for each member in the clan
@@ -93,8 +95,26 @@ def write_to_sheet(player_data_list):
         sheet.append_rows(player_data_list)
         pbar.update(len(player_data_list))  # Update the progress bar for each batch
 
-    # Split the player data string into a list
-    # player_data_list = player_data.split(',')
+
+def write_date_time_to_sheet():
+    current_datetime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    # Load Google Sheets API credentials from JSON file
+    creds = Credentials.from_service_account_file(credentials_path,
+                                                  scopes=['https://www.googleapis.com/auth/spreadsheets'])
+
+    # Connect to the Google Sheet by title
+    sheet = gspread.authorize(creds).open_by_key(spreadsheet_key).worksheet(sheet_title_datetime)
+
+    # Clear the sheet
+    sheet.clear()
+
+    # Set headers
+    headers = ["Last Updated"]
+    sheet.append_row(headers)
+
+    # Write date/time stamp
+    sheet.update_acell('A2', current_datetime)
+    # sheet.append_rows(current_datetime)
 
 
 def get_clan_tag():
@@ -106,6 +126,7 @@ def get_clan_tag():
         clan_tag = clan_tag_input
     # clan_tag = '8JGG22CJ'
     write_to_sheet(get_all_player_tags_from_clan(clan_tag))
+    write_date_time_to_sheet()
 
 
 get_clan_tag()
